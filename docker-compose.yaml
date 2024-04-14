@@ -109,5 +109,38 @@ services:
                   - "kafka1:9092"
                   - "kafka2:9092"
                   - "kafka3:9092"
+  
+  timescaledb:
+    image: timescale/timescaledb:latest-pg12
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: timescaledb
+      POSTGRES_PASSWORD: password
+    volumes:
+      - /data/timescaledb:/var/lib/postgresql/data
+      - ./init-scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+
+  pgadmin:
+    image: dpage/pgadmin4
+    depends_on:
+      - timescaledb
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    volumes:
+      - ./init-scripts:/init-scripts
+      - pgadmin-data:/var/lib/pgadmin
+    command: >
+      /bin/bash -c "python /scripts/setup_cinit-connection.py && /entrypoint.sh"
+    restart: always
+
+
+volumes:
+  timescaledb:
+  pgadmin-data:
 
 

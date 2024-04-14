@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS sensor (
+    id SERIAL PRIMARY KEY,
+    type TEXT NOT NULL,
+    value TEXT NOT NULL,
+    timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
