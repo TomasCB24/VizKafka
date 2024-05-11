@@ -1,37 +1,57 @@
 import random
 from datetime import datetime
 
+current_temperature = 22.0
+current_humidity = 50.0
+current_light = 500
+current_air_quality = 250
+current_sound = 80
+current_water = 0
+current_motion = 0
+current_door_window = 0
+
 def simulate_temperature():
-    """Simula datos de un sensor de temperatura, en grados Celsius."""
-    return round(random.uniform(15, 30), 2)
-
-def simulate_motion():
-    """Simula datos de un sensor de movimiento (0: no hay movimiento, 1: movimiento detectado)."""
-    return random.choice([0, 1])
-
-def simulate_light():
-    """Simula datos de un sensor de luz, en lúmenes."""
-    return random.randint(100, 1000)
+    global current_temperature
+    current_temperature += random.uniform(-0.5, 0.5)  # Variación pequeña
+    return round(max(min(current_temperature, 30), 15), 2)
 
 def simulate_humidity():
-    """Simula datos de un sensor de humedad, en porcentaje."""
-    return round(random.uniform(30, 90), 2)
+    global current_humidity
+    current_humidity += random.uniform(-1, 1)
+    return round(max(min(current_humidity, 90), 30), 2)
+
+def simulate_light():
+    global current_light
+    current_light += random.randint(-10, 10)
+    return max(min(current_light, 1000), 100)
 
 def simulate_air_quality():
-    """Simula datos de un sensor de calidad del aire, índice de calidad (cuanto menor, mejor)."""
-    return random.randint(0, 500)
+    global current_air_quality
+    current_air_quality += random.randint(-5, 5)
+    return max(min(current_air_quality, 500), 0)
 
 def simulate_sound():
-    """Simula datos de un sensor de sonido, en decibelios."""
-    return random.randint(30, 130)
+    global current_sound
+    current_sound += random.randint(-2, 2)
+    return max(min(current_sound, 130), 30)
+
+def simulate_motion():
+    global current_motion
+    # Supongamos que el movimiento es menos frecuente
+    current_motion = 1 if random.random() < 0.05 else 0
+    return current_motion
 
 def simulate_water():
-    """Simula datos de un sensor de agua (0: seco, 1: agua detectada)."""
-    return random.choice([0, 1])
+    global current_water
+    # Supongamos que la detección de agua cambia raramente
+    current_water = 1 if random.random() < 0.01 else 0
+    return current_water
 
 def simulate_door_window():
-    """Simula datos de un sensor de puerta/ventana (0: cerrado, 1: abierto)."""
-    return random.choice([0, 1])
+    global current_door_window
+    # Cambio raro
+    current_door_window = 1 if random.random() < 0.02 else 0
+    return current_door_window
 
 def generate_sensor_data(sensor_type):
     sensor_simulators = {

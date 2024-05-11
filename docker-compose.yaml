@@ -138,9 +138,24 @@ services:
       /bin/bash -c "python /scripts/setup_cinit-connection.py && /entrypoint.sh"
     restart: always
 
+  grafana:
+    image: grafana/grafana
+    depends_on:
+      - timescaledb
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    volumes:
+      - grafana-data:/var/lib/grafana
+    restart: always
+
+
 
 volumes:
   timescaledb:
   pgadmin-data:
+  grafana-data:
 
 

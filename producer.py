@@ -1,5 +1,6 @@
 from kafka import KafkaProducer
 import json
+import time
 import random
 from sensors import generate_sensor_data
 
@@ -8,10 +9,11 @@ producer = KafkaProducer(bootstrap_servers=['localhost:29092', 'localhost:39092'
 
 sensor_types = ['Temperature', 'Motion', 'Light', 'Humidity', 'AirQuality', 'Sound', 'Water', 'DoorWindow']
 
-# Generar y enviar datos de sensor
-for _ in range(20):
-    sensor_type = random.choice(sensor_types)
-    data = generate_sensor_data(sensor_type)
-    producer.send('sensor-data', value=data)
-
-producer.flush()
+while True:  # Bucle infinito para enviar datos continuamente
+    for sensor_type in sensor_types:  # Iterar sobre cada tipo de sensor
+        data = generate_sensor_data(sensor_type)
+        topic_name = f'sensor-{sensor_type.lower()}'  # Generar nombre de tópico basado en tipo de sensor
+        producer.send(topic_name, value=data)  # Usar el nombre del tópico para publicar
+        print(f"Enviado a {topic_name}: {data}")  # Imprimir el dato enviado y el tópico
+    producer.flush()  # Vaciar el productor después de enviar un conjunto de datos
+    time.sleep(10)
