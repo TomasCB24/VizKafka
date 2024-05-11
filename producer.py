@@ -1,7 +1,6 @@
 from kafka import KafkaProducer
 import json
 import time
-import random
 from sensors import generate_sensor_data
 
 producer = KafkaProducer(bootstrap_servers=['localhost:29092', 'localhost:39092','localhost:49092'],
